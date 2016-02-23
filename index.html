@@ -1,0 +1,148 @@
+<HTML lang="en">
+	<HEAD>
+		<meta charset="utf-8">
+		<TITLE>RDisplay</TITLE>
+		 <link rel="stylesheet" href="css/bootstrap.min.css">
+		 <link rel="stylesheet" href="js/bootstrap.min.js">
+		 <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+	</HEAD>
+	<BODY>
+		<div id="header">
+			<!--<img src="http://localhost/images/header-image.jpg" class="img-responsive">-->
+		</div>
+		<div id="content">
+			<div class="panel panel-default">
+				<div class="panel-body">
+				<script>
+					setInterval(function() {
+						$.getJSON('/json/data.json', function(client) {
+							var output="<p>";
+							output+="Клиент"+": "+client.Customer.Name;
+							output+="</p>";
+							document.getElementById("customer").innerHTML=output;
+						});
+					}, 1000);
+					$.ajaxSetup({
+					  cache:false
+					});
+				</script>
+					<div id="customer">
+					</div>
+				</div>
+				<div class="panel-body-right">
+					<div id="date"></div>
+				</div>
+			</div>
+			<script>
+				setInterval(function() {
+					$.getJSON('/json/data.json', function(check) {
+						var line = "";
+						for(var items in check.Receipt){
+							var output = "<tr><td>"+check.Receipt[items].Qnt+"</td>"+"<td>"+check.Receipt[items].Item+
+								"</td>"+"<td>"+check.Receipt[items].LineTotal+"</td></tr>";
+							line+=output;
+						}
+						document.getElementById("tbody").innerHTML=line;
+					});
+				}, 1000);
+				$.ajaxSetup({
+				  cache:false
+				});
+			</script>
+			<div class="panel panel-default-check">
+				<table class="table table-striped table-hover ">
+				  <thead>
+					<tr>
+					  <th>Бр.</th>
+					  <th>Артикул</th>
+					  <th>Цена</th>
+					  </tr>
+				  </thead>
+				  <tbody id="tbody"></tbody>
+				</table>
+				<script>
+					setInterval(function() {
+						$.getJSON('/json/data.json', function(total) {
+							var output="";
+							output+=total.ReceiptTotal;
+							document.getElementById("badgeTotal").innerHTML=output+" "+total.CurrencySymbol;
+						});
+					}, 1000);
+					$.ajaxSetup({
+					  cache:false
+					});
+				</script>
+				
+			</div>
+			
+			<script>
+				setInterval(function() {
+					$.getJSON('/json/data.json', function(rest) {
+						var line = "";
+						for(var items in rest.Package){
+							var output = "<tr><td>"+rest.Package[items].Item+"</td>"+"<td>"+rest.Package[items].Total+
+								"</td>"+"<td>"+rest.Package[items].Used+"</td>"+"<td>"+rest.Package[items].Left+"</td>"
+								+"<td>"+rest.Package[items].ValidTill+"</td></tr>";
+							line+=output;
+						}
+						document.getElementById("tbodyRest").innerHTML=line;
+					});
+				}, 1000);
+				$.ajaxSetup({
+				  cache:false
+				});
+			</script>
+			<div class="panel panel-default-rest">
+				<div id="rest">
+					<table class="table table-striped table-hover ">
+					  <thead>
+						<tr>
+						  <th>Пакет</th>
+						  <th>Закупени</th>
+						  <th>Използвани</th>
+						  <th>Остатък</th>
+						  <th>Валидни</th>
+						  </tr>
+					  </thead>
+					  <tbody id="tbodyRest"></tbody>
+					</table> 
+				</div>
+				<div id="ads">
+					<video width="auto" height="95%" autoplay muted loop><source src="video/video.mp4" type="video/mp4"></video>
+					<a class="navbar-brand" href="">
+						<!--<img class="img-responsive" src="">-->
+					</a>
+				</div>
+			</div>
+			<div id="totalBar">
+				<ul class="list-group">
+					<li class="list-group-item">
+					<span class="badge" id="badgeTotal"></span>
+					ТОТАЛ :
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div id="footer">
+				<!--<img src="http://localhost/images/footer-image.jpg"class="img-responsive">-->
+		</div>
+		<script>
+		setInterval(function() {
+		document.getElementById("date").innerHTML = formatAMPM();
+		function formatAMPM() {
+		var d = new Date(),
+			minutes = d.getMinutes().toString().length == 1 ? '0'+d.getMinutes() : d.getMinutes(),
+			hours = d.getHours().toString().length == 1 ? '0'+d.getHours() : d.getHours(),
+			ampm = d.getHours() >= 12 ? 'pm' : 'am',
+			months = ['Януари','Февруари','Март','Април','Май','Юни','Юли','Август','Септември','Октомври','Ноември','Декември'],
+			days = ['Неделя','Понеделник','Вторник','Сряда','Четвъртък','Петък','Събота'];
+		return days[d.getDay()]+' '+d.getDate()+' '+months[d.getMonth()]+' '+d.getFullYear()+' '+hours+':'+minutes+' '+ampm;
+		
+		}}, 1000);
+					$.ajaxSetup({
+					  cache:false
+					});
+		</script>
+		
+	</BODY>
+</HTML>
